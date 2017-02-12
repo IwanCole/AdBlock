@@ -7,6 +7,7 @@ Run in an Admin Command Prompt using:
 python DNSBLocker.py X COMMAND ARGS
 ```
 Where COMMAND = list | add webaddress.com | remove webaddress.com
+
 Also X is an unused argument that exists so that DNSBlocker.py can be run from batch scripts.
 
 For example, to block google.com, use
