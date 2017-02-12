@@ -6,13 +6,14 @@ Run in an Admin Command Prompt using:
 ```sh
 python DNSBLocker.py X COMMAND ARGS
 ```
-Where COMMAND = list | add <webaddress.com> | remove <webaddress.com> and X is an unused argument that exists so that DNSBlocker.py can be run from batch scripts.
+Where COMMAND = list | add webaddress.com | remove webaddress.com
+Also X is an unused argument that exists so that DNSBlocker.py can be run from batch scripts.
 
 For example, to block google.com, use
 ```sh
 python DNSBlocker.py X add google.com
 ```
-This will block both google.com and www.google.com
+This will block both 'google.com' and 'www.google.com'
 
 Some example sites to block:
 - terraclicks.com
