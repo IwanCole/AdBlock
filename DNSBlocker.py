@@ -1,5 +1,6 @@
 import sys
 
+# Lists the domains currently being resolved to localhost
 def blockList(filename):
     f = open(filename, 'r')
     for line in f:
@@ -8,6 +9,7 @@ def blockList(filename):
             print(line)
     f.close()
 
+# Forces a new domain to resolve to localhost
 def blockAdd(webAddress, filename):
     f = open(filename, 'a+')
     lineToWrite = "127.0.0.1 www." + webAddress + " " + webAddress
@@ -23,6 +25,7 @@ def blockAdd(webAddress, filename):
         print("FAILED\nWebsite " + webAddress + " is already blocked")
     f.close()
 
+# Stops a domain from being resolved to localhost
 def blockRem(webAddress, filename):
     lineToFind = "127.0.0.1 www." + webAddress + " " + webAddress + "\n"
     f = open(filename, 'r')
@@ -31,7 +34,6 @@ def blockRem(webAddress, filename):
 
     for line in f:
         lines.append(line)
-        # line = line.replace"
         if line[0] != '#' and line[0] != '\n':
             if line[-1] != '\n':
                 line += "\n"
@@ -58,9 +60,10 @@ def invalid():
     print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | add <webaddress.com> | remove <webaddress.com>")
     print("|  CAUTION: Adding a webaddress will block access to it by making the local DNS to resolve to 127.0.0.1")
 
+# Selects correct hosts file depending on OS
 def pickFilename():
     if sys.platform.startswith('win32'):
-	return "C:\Windows\System32\drivers\etc\hosts"
+        return "C:\Windows\System32\drivers\etc\hosts"
     elif sys.platform.startswith('darwin') or sys.platform.startswith('linux'):
         return "/etc/hosts"
 
