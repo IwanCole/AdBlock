@@ -1,8 +1,6 @@
 import sys
 
-filename = "C:\Windows\System32\drivers\etc\hosts"
-
-def blockList():
+def blockList(filename):
     f = open(filename, 'r')
     for line in f:
         if line[0] != "#" and line[0] != "\n":
@@ -10,7 +8,7 @@ def blockList():
             print(line)
     f.close()
 
-def blockAdd(webAddress):
+def blockAdd(webAddress, filename):
     f = open(filename, 'a+')
     lineToWrite = "127.0.0.1 www." + webAddress + " " + webAddress
     duplicate = False
@@ -25,7 +23,7 @@ def blockAdd(webAddress):
         print("FAILED\nWebsite " + webAddress + " is already blocked")
     f.close()
 
-def blockRem(webAddress):
+def blockRem(webAddress, filename):
     lineToFind = "127.0.0.1 www." + webAddress + " " + webAddress + "\n"
     f = open(filename, 'r')
     lines = []
@@ -60,22 +58,28 @@ def invalid():
     print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | add <webaddress.com> | remove <webaddress.com>")
     print("|  CAUTION: Adding a webaddress will block access to it by making the local DNS to resolve to 127.0.0.1")
 
+def pickFilename():
+    if sys.platform.startswith('win32'):
+	return "C:\Windows\System32\drivers\etc\hosts"
+    elif sys.platform.startswith('darwin') or sys.platform.startswith('linux'):
+        return "/etc/hosts"
 
 def main(args):
+    filename = pickFilename()
     if len(args) == 4 or len(args) == 3:
         if args[2] == "list":
             if len(args) == 3:
-                blockList()
+                blockList(filename)
             else:
                 invalid()
         elif args[2] == "add":
             if len(args) == 4:
-                blockAdd(args[3])
+                blockAdd(args[3], filename)
             else:
                 invalid()
         elif args[2] == "remove":
             if len(args) == 4:
-                blockRem(args[3])
+                blockRem(args[3], filename)
             else:
                 invalid()
         else:

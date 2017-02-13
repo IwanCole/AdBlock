@@ -1,8 +1,8 @@
 # AdBlock / Popup Blocker
 
-Blocks domains by resolving a given URL to localhost. Made because certain streaming sites throw loads of Pop-Under ads when clicking any video controls. Normal Adlock doesn't seem to stop them sadly. Works for Windows.
+Blocks domains by resolving a given URL to localhost. Made because certain streaming sites throw loads of Pop-Under ads when clicking any video controls. Normal Adlock doesn't seem to stop them sadly. Works for Windows and now Linux too(?).
 
-Run in an Admin Command Prompt using:
+Run in an Admin Command Prompt using, or use sudo on linux based systems:
 ```sh
 python DNSBLocker.py X COMMAND ARGS
 ```
