@@ -83,20 +83,20 @@ def main(args):
     if filename == 1:
         print("Error selecting platform")
     else:
-        if len(args) == 4 or len(args) == 3:
-            if args[2] == "list":
-                if len(args) == 3:
+        if len(args) == 4 or len(args) == 3 or len(args) == 2:
+            if args[-1] == "list":
+                if len(args) == 3 or len(args) == 2:
                     blockList(filename)
                 else:
                     invalid()
-            elif args[2] == "add":
-                if len(args) == 4:
-                    blockAdd(args[3], filename)
+            elif args[-2] == "add":
+                if len(args) == 4 or len(args) == 3:
+                    blockAdd(args[-1], filename)
                 else:
                     invalid()
-            elif args[2] == "remove":
-                if len(args) == 4:
-                    blockRem(args[3], filename)
+            elif args[-2] == "remove":
+                if len(args) == 4 or len(args) == 3:
+                    blockRem(args[-1], filename)
                 else:
                     invalid()
             else:
