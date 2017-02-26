@@ -46,7 +46,7 @@ Some example sites to block:
 - addilite.com
 - jolic2.com
 - alibaba.com
-- thevideo.me
+- breitbart.com
 
 
 Maybe backup your hosts file first, I don't wanna break it. Located in
