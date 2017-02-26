@@ -1,4 +1,5 @@
 import sys
+import urllib2
 
 # Lists the domains currently being resolved to localhost
 def blockList(filename):
@@ -63,12 +64,35 @@ def blockRem(webAddress, filename):
     except IOError as e: fileError(e)
 
 def fileError(e):
-    print("Error acessing hosts file, this could be because it doesn't exist or is located somewhere else")
+    print("Hosts file might not exist, or you're not an admin")
     print("Error: " + str(e))
+    sys.exit(1)
 
 def invalid():
-    print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | add <webaddress.com> | remove <webaddress.com>")
+    print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | auto | add <webaddress.com> | remove <webaddress.com>")
+    print("|  AUTO pulls a list of domains from my github. You can review them before the sites are blocked")
     print("|  CAUTION: Adding a webaddress will block access to it by making the local DNS to resolve to 127.0.0.1")
+
+# Pull a list of annoying websites to block, blocks them
+def serverPull(filename):
+    try:
+        print("Reading from remote file...")
+        data = urllib2.urlopen("https://raw.githubusercontent.com/IwanCole/AdBlock/master/blocklist.txt").read(20000)
+        sites = data.split("\n")
+        print("\nThe following webaddresses will be blocked:\n" + str(data))
+
+        invalid = True
+        while invalid:
+            conf = raw_input("Are you sure you would like to continue? Y/N\n")
+            if str(conf).lower() == "y" or str(conf).lower() == "n": invalid = False
+
+        if str(conf).lower() == "y":
+            for line in sites[:-1]:
+                blockAdd(line, filename)
+        else: print("Never mind")
+
+    except IOError as e:
+        print("Something went wrong :(\n" + str(e))
 
 # Selects correct hosts file depending on OS
 def pickFilename():
@@ -87,6 +111,11 @@ def main(args):
             if args[-1] == "list":
                 if len(args) == 3 or len(args) == 2:
                     blockList(filename)
+                else:
+                    invalid()
+            elif args[-1] == "auto":
+                if len(args) == 3 or len(args) == 2:
+                    serverPull(filename)
                 else:
                     invalid()
             elif args[-2] == "add":
