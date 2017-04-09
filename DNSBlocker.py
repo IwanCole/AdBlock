@@ -69,30 +69,43 @@ def fileError(e):
     sys.exit(1)
 
 def invalid():
-    print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | auto | add <webaddress.com> | remove <webaddress.com>")
+    print("|  Invalid command. Use:\n|\n|  COMMAND ARGS\n|\n|  Where COMMAND = list | auto | clean | add <webaddress.com> | remove <webaddress.com>")
     print("|  AUTO pulls a list of domains from my github. You can review them before the sites are blocked")
+    print("|  CLEAN pulls a list of domains from my github, and un-blocks them")
     print("|  CAUTION: Adding a webaddress will block access to it by making the local DNS to resolve to 127.0.0.1")
 
-# Pull a list of annoying websites to block, blocks them
-def serverPull(filename):
+# Return from server file list of webaddresses to block or un-block
+def serverPull():
     try:
         print("Reading from remote file...")
         data = urllib2.urlopen("https://raw.githubusercontent.com/IwanCole/AdBlock/master/blocklist.txt").read(20000)
         sites = data.split("\n")
-        print("\nThe following webaddresses will be blocked:\n" + str(data))
-
-        invalid = True
-        while invalid:
-            conf = raw_input("Are you sure you would like to continue? Y/N\n")
-            if str(conf).lower() == "y" or str(conf).lower() == "n": invalid = False
-
-        if str(conf).lower() == "y":
-            for line in sites[:-1]:
-                blockAdd(line, filename)
-        else: print("Never mind")
+        return [data, sites]
 
     except IOError as e:
         print("Something went wrong :(\n" + str(e))
+
+# Bulk blocks or bulk unblocks a list of default annoying websites
+def autoOrClean(filename, flag):
+    returnedData = serverPull()
+    data = returnedData[0]
+    sites = returnedData[1]
+
+    if flag == 1: filler = "un-"
+    else:         filler = ""
+
+    print("\nThe following webaddresses will be " + filler + "blocked:\n" + str(data))
+
+    invalid = True
+    while invalid:
+        conf = raw_input("Are you sure you would like to continue? Y/N\n")
+        if str(conf).lower() == "y" or str(conf).lower() == "n": invalid = False
+
+    if str(conf).lower() == "y":
+        for line in sites[:-1]:
+            if not flag: blockAdd(line, filename)
+            else:        blockRem(line, filename)
+    else: print("Never mind")
 
 # Selects correct hosts file depending on OS
 def pickFilename():
@@ -115,7 +128,12 @@ def main(args):
                     invalid()
             elif args[-1] == "auto":
                 if len(args) == 3 or len(args) == 2:
-                    serverPull(filename)
+                    autoOrClean(filename, 0)
+                else:
+                    invalid()
+            elif args[-1] == "clean":
+                if len(args) == 3 or len(args) == 2:
+                    autoOrClean(filename, 1)
                 else:
                     invalid()
             elif args[-2] == "add":

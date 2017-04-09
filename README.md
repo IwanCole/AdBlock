@@ -6,13 +6,13 @@ Run in an Admin Command Prompt using, or use sudo on linux based systems:
 ```sh
 python DNSBLocker.py X COMMAND ARGS
 ```
-Where COMMAND = list | auto | add webaddress.com | remove webaddress.com
+Where COMMAND = list | auto | clean | add webaddress.com | remove webaddress.com
 
 Also X is an unused argument that exists so that DNSBlocker.py can be run from batch scripts.
 This is in case a batch script is set to accept multiple arguments.
 You do not have to use X if you are running the python script directly.
 
-The 'auto' command pulls a list of domains from my github, found at /blocklist.txt. When you run this command you are able to review the sites before they are blocked.
+The 'auto' command pulls a list of domains from my github, found at /blocklist.txt. When you run this command you are able to review the sites before they are blocked. The 'clean' command does the opposite of 'auto'.
 
 For example, to block google.com by running the script directly, use
 ```sh
